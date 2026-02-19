@@ -5,6 +5,8 @@ import { requireAuth, apiSuccess, ApiError, withErrorHandling } from "@/utils/ap
 import { TemplateQuerySchema } from "@/utils/validation";
 import { createAdminClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 export const GET = withErrorHandling(async (req: NextRequest) => {
     await requireAuth(req);
 

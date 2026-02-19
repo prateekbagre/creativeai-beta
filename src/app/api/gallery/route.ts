@@ -4,6 +4,8 @@ import { NextRequest } from "next/server";
 import { requireAuth, apiSuccess, ApiError, withErrorHandling } from "@/utils/api";
 import { createAdminClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 export const GET = withErrorHandling(async (req: NextRequest) => {
     const user = await requireAuth(req);
 
