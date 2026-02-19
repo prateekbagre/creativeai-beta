@@ -6,6 +6,7 @@
 import type { Metadata } from "next";
 import { Nunito, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${nunito.variable} ${inter.variable} ${jetBrainsMono.variable}`}>
       <body className="bg-background font-body text-text-primary antialiased">
         {children}
+        <Toaster />
       </body>
     </html>
   );
