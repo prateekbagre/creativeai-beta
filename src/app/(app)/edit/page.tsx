@@ -21,6 +21,7 @@ const TOOLS: { id: Tool; label: string; icon: any; description: string; cost: nu
 export default function EditPage() {
     const [selectedTool, setSelectedTool] = useState<Tool>("bg-remove");
     const [imageUrl, setImageUrl] = useState("");
+    const [maskUrl, setMaskUrl] = useState("");
     const [upscaleScale, setUpscaleScale] = useState<2 | 4>(2);
     const [enhanceType, setEnhanceType] = useState<"auto" | "face" | "colorize">("auto");
     const [inpaintPrompt, setInpaintPrompt] = useState("");
@@ -50,7 +51,7 @@ export default function EditPage() {
         } else if (selectedTool === "inpaint") {
             endpoint = "/api/edit/inpaint";
             body.prompt = inpaintPrompt;
-            body.maskUrl = ""; // TODO: Implement masking
+            body.maskUrl = maskUrl;
         }
 
         try {
@@ -191,10 +192,20 @@ export default function EditPage() {
                                     onChange={(e) => setInpaintPrompt(e.target.value)}
                                     className="w-full h-28 p-4 bg-surface-2 border border-border rounded-xl text-sm resize-none focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                                 />
+                                <div>
+                                    <label className="text-xs font-bold text-text-disabled uppercase tracking-widest mb-2 block">Mask Layer (Optional)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Paste mask image URL..."
+                                        value={maskUrl}
+                                        onChange={(e) => setMaskUrl(e.target.value)}
+                                        className="w-full bg-surface-2 border border-border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                    />
+                                </div>
                                 <div className="p-3 bg-primary-light/30 border border-primary/20 rounded-xl flex gap-3 italic">
                                     <AlertCircle size={16} className="text-primary shrink-0 mt-0.5" />
                                     <p className="text-[10px] text-primary-dark leading-normal">
-                                        Brush/Masking tool coming soon. Use descriptive prompts for best results with current auto-detection.
+                                        Brush/Masking tool coming soon. Use descriptive prompts for best results with current auto-detection. Optionally provide a mask URL for precise area selection.
                                     </p>
                                 </div>
                             </div>
@@ -301,7 +312,7 @@ export default function EditPage() {
                                 <h3 className="text-lg font-bold">Modification Failed</h3>
                                 <p className="text-sm opacity-80 leading-relaxed">{state.errorMessage}</p>
                             </div>
-                            <button onClick={resetState} className="w-full btn-secondary py-3 px-6 font-bold">Return to Dashboard</button>
+                            <button onClick={resetState} className="w-full btn-secondary py-3 px-6 font-bold">Try Again</button>
                         </div>
                     )}
                 </div>

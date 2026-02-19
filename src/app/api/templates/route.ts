@@ -42,7 +42,7 @@ export const GET = withErrorHandling(async (req: NextRequest) => {
 
     if (error) {
         console.error(error);
-        throw new ApiError("INTERNAL_ERROR", "Failed to catch templates");
+        throw new ApiError("INTERNAL_ERROR", "Failed to fetch templates");
     }
 
     return apiSuccess({

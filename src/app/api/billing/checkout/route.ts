@@ -45,8 +45,8 @@ export const POST = withErrorHandling(async (req: NextRequest) => {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: type === "subscription" ? "subscription" : "payment",
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?checkout=success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?checkout=cancelled`,
+        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing?checkout=success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing?checkout=cancelled`,
         customer_email: user.email,
         metadata,
     });

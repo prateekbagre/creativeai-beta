@@ -22,24 +22,30 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as any;
     const { userId, type, credits } = session.metadata;
 
-    if (type === "topup") {
-      await grantTopupCredits({
-        userId,
-        amount: parseInt(credits),
-        referenceId: session.id,
-      });
-    } else if (type === "subscription") {
-      const plan = session.metadata.plan;
-      const admin = createAdminClient();
-      // Update user plan
-      // @ts-ignore
-      await (admin.from("users") as any)
-        .update({ plan, stripe_customer_id: session.customer })
-        .eq("id", userId);
-      // Initial grant happens in credits.ts -> runMonthlyCreditCycle or manually here
-      // PRD says: "Immediately grants allowance on first sub"
-      const { runMonthlyCreditCycle } = await import("@/lib/supabase/credits");
-      await runMonthlyCreditCycle(userId);
+    try {
+      if (type === "topup") {
+        await grantTopupCredits({
+          userId,
+          amount: parseInt(credits),
+          referenceId: session.id,
+        });
+      } else if (type === "subscription") {
+        const plan = session.metadata.plan;
+        const admin = createAdminClient();
+        // Update user plan
+        // @ts-ignore
+        await (admin.from("users") as any)
+          .update({ plan, stripe_customer_id: session.customer })
+          .eq("id", userId);
+        // Initial grant happens in credits.ts -> runMonthlyCreditCycle or manually here
+        // PRD says: "Immediately grants allowance on first sub"
+        const { runMonthlyCreditCycle } = await import("@/lib/supabase/credits");
+        await runMonthlyCreditCycle(userId);
+      }
+    } catch (err: any) {
+      console.error(`[Stripe Webhook Error] Failed to process ${type} for user ${userId}:`, err);
+      // Return 200 to prevent Stripe from retrying, but log the error for manual intervention
+      return NextResponse.json({ received: true, processingError: err.message });
     }
   }
 
