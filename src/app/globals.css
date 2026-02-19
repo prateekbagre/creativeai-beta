@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties (Design Tokens from PRD Section 9.1) ── */
+:root {
+  --color-primary:        #F97316;
+  --color-primary-hover:  #EA6C0A;
+  --color-primary-light:  #FFF7ED;
+  --color-secondary:      #0EA5E9;
+  --color-background:     #FEFAF5;
+  --color-surface:        #FFFFFF;
+  --color-surface-2:      #F9F5F0;
+  --color-border:         #E8DDD4;
+  --color-text-primary:   #1C1917;
+  --color-text-secondary: #78716C;
+  --color-text-disabled:  #C4B5AC;
+  --color-success:        #16A34A;
+  --color-warning:        #D97706;
+  --color-error:          #DC2626;
+  --color-credit:         #7C3AED;
+
+  /* Shadow system from PRD Section 9.3 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.10);
+}
+
+/* ─── Font families ───────────────────────────────────────────── */
+.font-heading { font-family: var(--font-heading), sans-serif; }
+.font-body    { font-family: var(--font-body), sans-serif; }
+.font-mono    { font-family: var(--font-mono), monospace; }
+
+/* ─── Base resets ─────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body), Inter, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), Nunito, sans-serif;
+}
+
+/* ─── Focus ring — PRD Section 12.5 accessibility ─────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Scrollbar styling ───────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface-2); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-disabled); }
+
+/* ─── Custom utility classes ─────────────────────────────────── */
+@layer components {
+  /* Primary button — PRD Section 9.4 */
+  .btn-primary {
+    @apply bg-primary text-white font-semibold text-sm px-4 py-2 rounded
+           hover:bg-primary-hover shadow-sm hover:shadow-md
+           disabled:bg-border disabled:text-text-disabled disabled:cursor-not-allowed
+           transition-all duration-150;
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply bg-transparent text-primary font-semibold text-sm px-4 py-2 rounded
+           border-2 border-primary hover:bg-primary-light
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-150;
+  }
+
+  /* Danger button */
+  .btn-danger {
+    @apply bg-error text-white font-semibold text-sm px-4 py-2 rounded
+           hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-150;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply bg-transparent text-text-secondary font-medium text-sm px-3 py-2 rounded
+           hover:bg-surface-2 disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-150;
+  }
+
+  /* Card */
+  .card {
+    @apply bg-surface rounded-md shadow-sm border border-border p-4;
+  }
+
+  /* Credit badge — always in purple per PRD */
+  .credit-badge {
+    @apply text-credit font-bold text-sm;
+  }
+
+  /* Input field */
+  .input {
+    @apply bg-surface border border-border rounded-sm px-3 py-2 text-sm
+           text-text-primary placeholder:text-text-disabled
+           focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-colors duration-150 w-full;
+  }
+
+  /* Textarea */
+  .textarea {
+    @apply input resize-none;
+  }
+
+  /* Label */
+  .label {
+    @apply text-sm font-semibold text-text-primary mb-1 block;
+  }
+
+  /* Badge / pill */
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold;
+  }
+
+  /* Section container */
+  .container-app {
+    @apply max-w-container mx-auto px-4 sm:px-6;
+  }
+}
+@layer utilities {
+  .shadow-glow {
+    filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.5));
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .glass {
+    @apply bg-surface/80 backdrop-blur-xl border border-white/20;
+  }
+  .luxury-card {
+    @apply bg-surface border border-border rounded-[40px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.08)] transition-all duration-500;
+  }
+}
